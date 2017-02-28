@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div id="background"></div>
+<style>
+    #background div{
+        height: 10px;
+        background-color: blue;
+        position: absolute;
+    }
+    html,body{
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+</style>
+<script src="jquery-3.1.1.js"></script>
+<script>
+    var width = document.body.clientWidth;
+    var height = document.body.clientHeight;
+    var data=[];
+    function initData(){
+        for(var i=0;i<6;i++){
+            data[i] = {};
+            var wp = Math.random()*2+2;
+            data[i].width = width/(Math.random()*2+2);
+            data[i].top = height/6*(i+1)-10;
+            if(i%2 === 0){
+                data[i].left = 0;
+            }
+            else{
+                data[i].right = 0;
+            }
+        }
+        render();
+    }
+    function render(){
+        for(var i=0;i<data.length;i++){
+            var div;
+            if(data[i].left === 0){
+                div = "<div style='width: "+data[i].width+"px;top: "+data[i].top+"px;left: "+data[i].left+"px'></div>";
+            }
+            else{
+                div = "<div style='width: "+data[i].width+"px;top: "+data[i].top+"px;right: "+data[i].right+"px'></div>";
+            }
+            $("#background").append(div);
+
+        }
+    }
+    initData();
+</script>
+</body>
+</html>
