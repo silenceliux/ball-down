@@ -22,6 +22,7 @@
     var width = document.body.clientWidth;
     var height = document.body.clientHeight;
     var data=[];
+    var isLeft = 1;
     function initData(){
         for(var i=0;i<6;i++){
             data[i] = {};
@@ -50,7 +51,36 @@
 
         }
     }
+    function move(){
+        for(var i=0;i<6;i++){
+            data[i].top = data[i].top-1;
+            if(data[i].top<0){
+                data.splice(i,1);
+                $("#background").find("div").remove();
+                addOne();
+            }
+        }
+        $("#background").html("");
+        render();
+        setTimeout(move,10);
+    }
+    function addOne(){
+        var obj = {
+            width:width/(Math.random()*2+2),
+            top:height-10
+        };
+        if(isLeft){
+            obj.left = 0;
+            isLeft = 0;
+        }
+        else{
+            obj.right = 0;
+            isLeft = 1;
+        }
+        data[data.length] = obj;
+    }
     initData();
+    move();
 </script>
 </body>
 </html>
