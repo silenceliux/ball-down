@@ -7,6 +7,7 @@ var ball= {
     startX:0,
     moveX:0,
     ballLeft:0,
+    ballUp:-1,
     init:function(){
         var me = this;
         this.initData(me.lineCount);
@@ -53,6 +54,7 @@ var ball= {
             me.data[i].top = me.data[i].top-1;
             if(me.data[i].top<0){
                 me.data.splice(i,1);
+                me.ballUp -=1;
                 me.initData(1);
             }
         }
@@ -60,22 +62,40 @@ var ball= {
         me.render();
         //小球
         var top = $(".ball").offset().top;
-        if(top+$(".ball").height()/2>me.height || top +$(".ball").height()/2 < 0){
-            console.log("输了");
-            clearTimeout();
-            return;
+        if(me.ballUp > -1){
+            $(".ball").css("top",me.data[me.ballUp].top - $(".ball").height());
+            if(top +$(".ball").height()/2 < 0){
+                console.log("输了");
+                clearTimeout();
+                return;
+            }
         }
-        $(".ball").css("top",top+2);
+        else{
+            if(top+$(".ball").height()/2>me.height ){
+                console.log("输了");
+                clearTimeout();
+                return;
+            }
+            $(".ball").css("top",top+2);
+            me.isUp();
+        }
+
         setTimeout(me.move,10);
     },
     isUp:function(){
         var me=this;
         var offset  =$(".ball").offset();
         for(var i=0;i<me.data.length;i++){
-            if(offset.top == 1‘){
-
+            if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 1 && offset.left < me.data[i].width && me.data[i].left === 0){
+                me.ballUp = i;
+                return;
+            }
+            else if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 1 && offset.left > me.width - me.data[i].width && me.data[i].right === 0){
+                me.ballUp = i;
+                return;
             }
         }
+
     },
     initBtn:function(){
         var me=this;
@@ -86,6 +106,7 @@ var ball= {
         }, false);
         document.addEventListener('touchmove', function(event){
 //            event.preventDefault();
+            me.ballUp = -1;
             var touch = event.touches[0]; //获取第一个触点
             me.moveX = Number(touch.pageX); //页面触点X坐标
             me.ballMove();
