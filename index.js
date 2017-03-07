@@ -8,6 +8,8 @@ var ball= {
     moveX:0,
     ballLeft:0,
     ballUp:-1,
+    speed:1,
+    score:0,
     init:function(){
         var me = this;
         this.initData(me.lineCount);
@@ -51,9 +53,10 @@ var ball= {
         var me = ball;
         //横杠
         for(var i=0;i<me.lineCount;i++){
-            me.data[i].top = me.data[i].top-1;
+            me.data[i].top = me.data[i].top-me.speed;
             if(me.data[i].top<0){
                 me.data.splice(i,1);
+                me.score++;
                 me.ballUp -=1;
                 me.initData(1);
             }
@@ -76,21 +79,23 @@ var ball= {
                 clearTimeout();
                 return;
             }
-            $(".ball").css("top",top+2);
+            $(".ball").css("top",top+me.speed);
             me.isUp();
         }
-
+        if(me.score>=me.speed* me.speed*5){
+            me.speed++;
+        }
         setTimeout(me.move,10);
     },
     isUp:function(){
         var me=this;
         var offset  =$(".ball").offset();
         for(var i=0;i<me.data.length;i++){
-            if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 2 && offset.left < me.data[i].width && me.data[i].left === 0){
+            if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= me.speed*2 && offset.left+$(".ball").height()/2 < me.data[i].width && me.data[i].left === 0){
                 me.ballUp = i;
                 return;
             }
-            else if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 2 && offset.left > me.width - me.data[i].width && me.data[i].right === 0){
+            else if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= me.speed*2 && offset.left+$(".ball").height()/2 > me.width - me.data[i].width && me.data[i].right === 0){
                 me.ballUp = i;
                 return;
             }
