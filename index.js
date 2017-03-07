@@ -48,7 +48,7 @@ var ball= {
         }
     },
     move:function(){
-        var me=ball;
+        var me = ball;
         //横杠
         for(var i=0;i<me.lineCount;i++){
             me.data[i].top = me.data[i].top-1;
@@ -86,11 +86,11 @@ var ball= {
         var me=this;
         var offset  =$(".ball").offset();
         for(var i=0;i<me.data.length;i++){
-            if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 1 && offset.left < me.data[i].width && me.data[i].left === 0){
+            if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 2 && offset.left < me.data[i].width && me.data[i].left === 0){
                 me.ballUp = i;
                 return;
             }
-            else if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 1 && offset.left > me.width - me.data[i].width && me.data[i].right === 0){
+            else if(Math.abs(offset.top + $(".ball").height() - me.data[i].top) <= 2 && offset.left > me.width - me.data[i].width && me.data[i].right === 0){
                 me.ballUp = i;
                 return;
             }
@@ -106,6 +106,9 @@ var ball= {
         }, false);
         document.addEventListener('touchmove', function(event){
 //            event.preventDefault();
+            var offset  =$(".ball").offset();
+            if(me.ballUp>-1)
+            if((offset.left > me.data[me.ballUp].width && me.data[me.ballUp].left === 0 )|| (offset.left < me.width - me.data[me.ballUp].width && me.data[me.ballUp].right === 0))
             me.ballUp = -1;
             var touch = event.touches[0]; //获取第一个触点
             me.moveX = Number(touch.pageX); //页面触点X坐标
